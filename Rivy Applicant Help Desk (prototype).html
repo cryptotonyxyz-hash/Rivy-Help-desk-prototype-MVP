@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rivy Applicant Help Desk (prototype)</title>
+<style>
+:root{--bg:#f6f8f7;--card:#fff;--ink:#14181a;--mut:#5b6670;--line:#dce3e0;--acc:#0b6b4d;--accbg:#e3f4ec;
+--red:#b42318;--redbg:#fdecea;--amb:#8a5a00;--ambbg:#fff4dc;--ok:#0b6b4d;--okbg:#e3f4ec;--blu:#27467d;--blubg:#e8eefb;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1311;--card:#181d1a;--ink:#ecefed;--mut:#9aa7a0;--line:#2a322e;--acc:#6fd3a8;--accbg:#173226;
+--red:#ff9b91;--redbg:#3a1e1b;--amb:#f3c466;--ambbg:#3a2e12;--ok:#6fd3a8;--okbg:#173226;--blu:#a9bfee;--blubg:#1f2a44}}
+:root[data-theme="dark"]{--bg:#0f1311;--card:#181d1a;--ink:#ecefed;--mut:#9aa7a0;--line:#2a322e;--acc:#6fd3a8;--accbg:#173226;
+--red:#ff9b91;--redbg:#3a1e1b;--amb:#f3c466;--ambbg:#3a2e12;--ok:#6fd3a8;--okbg:#173226;--blu:#a9bfee;--blubg:#1f2a44}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+main{max-width:780px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.5rem;margin:0 0 4px}h2{font-size:1.05rem;margin:0 0 10px}
+.sub{color:var(--mut);margin:0 0 14px}
+.banner{background:var(--accbg);border-radius:10px;padding:10px 14px;font-size:.88rem;margin-bottom:14px}
+.tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab{border-radius:999px;padding:8px 14px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--acc);border-color:var(--acc);color:#fff}
+:root[data-theme="dark"] .tab[aria-selected="true"]{color:#08140f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tab[aria-selected="true"]{color:#08140f}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}
+@media (max-width:560px){.grid{grid-template-columns:1fr}}
+label{display:block;font-size:.82rem;color:var(--mut);margin-bottom:4px}
+input[type=number],input[type=text],select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 10px}
+textarea{min-height:96px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--acc);outline-offset:1px}
+.chk{display:flex;gap:8px;align-items:center;margin:4px 0;color:var(--ink);font-size:.95rem}
+.chk input{width:auto}
+button.b{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 14px}
+button.p{background:var(--acc);border-color:var(--acc);color:#fff}
+:root[data-theme="dark"] button.p{color:#08140f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) button.p{color:#08140f}}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.item{border-left:4px solid var(--line);background:var(--card);border-radius:0 10px 10px 0;padding:9px 12px;margin:8px 0;font-size:.93rem;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.item b{display:block}
+.t-stop{border-left-color:var(--red)}.t-check{border-left-color:var(--amb)}.t-conf{border-left-color:var(--blu)}.t-ok{border-left-color:var(--ok)}.t-info{border-left-color:var(--line)}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;border-radius:6px;padding:1px 7px;margin-right:6px;vertical-align:middle}
+.g-stop{background:var(--redbg);color:var(--red)}.g-check{background:var(--ambbg);color:var(--amb)}.g-conf{background:var(--blubg);color:var(--blu)}.g-ok{background:var(--okbg);color:var(--ok)}.g-info{background:var(--bg);color:var(--mut)}
+.src{color:var(--mut);font-size:.78rem;display:block;margin-top:2px}
+.pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:.8rem;font-weight:700}
+.hi{background:var(--redbg);color:var(--red)}.no{background:var(--okbg);color:var(--ok)}
+.foot{color:var(--mut);font-size:.8rem}.hide{display:none}
+table{width:100%;border-collapse:collapse;font-size:.82rem}th,td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+.scroll{overflow-x:auto}details summary{cursor:pointer;font-weight:600}
+ul.l{margin:6px 0 0 18px;padding:0}
+</style>
+</head>
+<body>
+<main>
+<h1>Rivy Applicant Help Desk</h1>
+<p class="sub">Know what to expect before applying, and sort incoming questions faster.</p>
+<div class="banner">Prototype by Anthony Muiz, built only from Rivy’s public pages and my own testing on 3 and 4 Nov 2026 (Terms v3.9.57, FAQ, website and Android app v3.11.6). It is not an official Rivy tool and not a ruling on eligibility. Rivy decides every application.</div>
+
+<div class="tabs" role="tablist">
+<button class="tab" role="tab" id="t1" aria-selected="true">1. Before you apply</button>
+<button class="tab" role="tab" id="t2" aria-selected="false">2. Message triage</button>
+</div>
+
+<section id="p1">
+<div class="card">
+<h2>Your situation</h2>
+<div class="grid">
+<div><label for="age">Your age</label><input id="age" type="number" min="0" max="120" placeholder="e.g. 24"></div>
+<div><label for="gu">Do you have a guarantor?</label><select id="gu"><option value="u">Not sure</option><option value="y">Yes</option><option value="n">No</option></select></div>
+<div class="full"><label>Documents you have ready</label>
+<label class="chk"><input type="checkbox" id="d1"> Valid ID</label>
+<label class="chk"><input type="checkbox" id="d2"> Proof of income</label>
+<label class="chk"><input type="checkbox" id="d3"> Recent utility bill</label></div>
+</div>
+<div class="row"><button class="b p" id="go1">Check readiness</button></div>
+</div>
+<div id="o1" class="hide"></div>
+</section>
+
+<section id="p2" class="hide">
+<div class="card">
+<h2>Incoming message</h2>
+<div class="grid">
+<div><label for="nm">Customer’s first name (optional)</label><input id="nm" type="text" placeholder="e.g. Ada"></div>
+<div class="full"><label for="msg">Paste the message</label><textarea id="msg" placeholder="Paste a customer message here"></textarea></div>
+</div>
+<div class="row"><button class="b p" id="go2">Triage message</button><button class="b" id="x1">Example: suspended account</button><button class="b" id="x2">Example: payment</button><button class="b" id="x3">Example: delivery</button></div>
+<p class="foot">Examples are invented for this demo, except the first, which is a message I sent while testing.</p>
+</div>
+<div id="o2" class="hide"></div>
+<div class="card"><h2>Messages triaged in this browser</h2><p class="foot" style="margin-top:0">Kept only in this browser as a demo of a triage log. Message text is not stored.</p><div id="log"></div><div class="row"><button class="b" id="clr">Clear log</button></div></div>
+</section>
+
+<div class="card">
+<details><summary>What I observed while testing (3 and 4 Nov 2026)</summary>
+<ul class="l foot">
+<li>Android app v3.11.6: the date-of-birth picker blocked every date after 3 Nov 2004, typed dates were rejected, and the pencil icon did nothing. The website sign-up accepted 23 Nov 2004. Terms 3.2(a) give 18 as the minimum age.</li>
+<li>Website dashboard showed an “account suspended” banner with a Contact Support button. I saw no reason or next step on the screen.</li>
+<li>In-app chat: the first prompts asked for a “Referral”, then for background about me and my email, before the suspension was discussed.</li>
+<li>EnergyStack: the 600W Jinko panel page shows 0 for efficiency, voltage rating, open circuit voltage and short circuit current, and a weight of 45 with no unit. The Geely Geometry A page has an empty Specifications section and shows 0 under Warranty, although its description lists specifications.</li>
+<li>Terms: section 08 (Communication) opens with the same limitation-of-liability paragraph as section 06, which looks like a copy-paste slip.</li>
+</ul>
+<p class="foot">These are what I saw, on the dates given. I do not know the reasons behind them, and my account may have been suspended for a reason I cannot see.</p>
+</details>
+</div>
+<p class="foot">Built from public sources. Replies and requirements here are suggestions for a human to review, never promises on Rivy’s behalf.</p>
+</main>
+<script>
+var $=function(i){return document.getElementById(i)};
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+function rx(k){return new RegExp("\\b"+k.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"(s|es|ed|ing)?\\b","i")}
+function tab(n){$("p1").className=n===1?"":"hide";$("p2").className=n===2?"":"hide";$("t1").setAttribute("aria-selected",n===1);$("t2").setAttribute("aria-selected",n===2)}
+$("t1").onclick=function(){tab(1)};$("t2").onclick=function(){tab(2)};
+
+// ---- PART 1: readiness guide
+var TG={stop:"Stop",check:"Check",conf:"Confirm with Rivy",ok:"OK",info:"Good to know"};
+function it(t,title,txt,src){return '<div class="item t-'+t+'"><b><span class="tag g-'+t+'">'+TG[t]+'</span>'+title+'</b>'+txt+'<span class="src">Source: '+src+'</span></div>'}
+$("go1").onclick=function(){
+ var a=parseInt($("age").value,10),g=$("gu").value,h="";
+ if(isNaN(a))h+=it("conf","Age not entered","Enter your age to check the minimum age.","Terms 3.2(a)");
+ else if(a<18)h+=it("stop","Under the minimum age","Rivy’s Terms set 18 as the minimum age to use the platform.","Terms 3.2(a)");
+ else if(a<22)h+=it("check","Allowed by the Terms, but sign-up may block you","The Terms say 18 or over. In my test on 3 Nov 2026, the Android app’s date picker blocked birth dates after 3 Nov 2004 (age 22 or over), while the website accepted 23 Nov 2004. If you are blocked, try the website and ask Rivy to confirm the real minimum age.","Terms 3.2(a); my testing 3 Nov 2026");
+ else h+=it("ok","No age conflict found","You are over the 18 minimum and over the cutoff I saw in the app.","Terms 3.2(a); my testing");
+ if(g==="y")h+=it("check","Make sure your guarantor understands the role","If a repayment fails, Rivy says it will contact the guarantor, and may try to collect 100% of the outstanding amount from them.","Terms 5.5 and 5.7");
+ else h+=it("check","The Terms mention a guarantor","You are asked for personal information about yourself and a guarantor. Confirm with Rivy whether your product needs one before you start.","Terms 3.2(b)");
+ var dn=[["d1","a valid ID"],["d2","proof of income"],["d3","a recent utility bill"]],miss=dn.filter(function(d){return!$(d[0]).checked});
+ if(miss.length)h+=it("check","Gather your documents",'Still to prepare: '+miss.map(function(d){return d[1]}).join(", ")+'.',"Rivy FAQ, as I read it on 3 Nov 2026");
+ else h+=it("ok","Documents ready","You have the ID, proof of income and utility bill I saw listed.","Rivy FAQ, as I read it on 3 Nov 2026");
+ h+=it("info","What the FAQ says about the loan","No collateral is required, repayment runs 3 to 18 months, and the team says it will get in touch within 24 hours of an application.","Rivy FAQ, as I read it on 3 Nov 2026");
+ h+=it("info","An application is not automatic approval","Rivy runs identity checks and a credit assessment on you and your guarantor.","Terms 3.2(c) and 3.2(e)");
+ h+=it("info","Late payments","If any payment stays outstanding for at least 14 days, Rivy may share your information with credit bureaus.","Terms 5.9");
+ h+=it("conf","Not stated in the Terms","Interest rate, fee amounts, loan limits, how to check an application’s status, and what a suspended account means. I did not see these in the FAQ either. Ask Rivy before you apply.","Terms v3.9.57; FAQ as read 3 Nov 2026");
+ $("o1").innerHTML=h;$("o1").className=""};
+
+// ---- PART 2: triage
+var C=[
+{n:"Can’t sign up or log in",hi:0,kw:"sign up,signup,register,registration,date of birth,blank,cannot log in,can’t log in,login,log in,otp,code,error,crash,update",
+ ask:["Which version: Android app, iPhone app or website","App version (shown in the footer)","Screenshot of the screen where it stops","Date and time it happened"],
+ to:"Engineering or product support",
+ re:"Hi {n}, thanks for reaching out, and sorry you are stuck at sign-up. So we can look into it quickly, please tell us: (1) whether you are using the Android app, the iPhone app or the website, (2) the app version if you can see it, and (3) a screenshot of the screen where it stops. If you can, you could also try the website version meanwhile. We will come back to you by [time]."},
+{n:"Account suspended or restricted",hi:1,kw:"suspend,suspended,suspension,blocked,locked,deactivated,restricted,banned,cannot access",
+ ask:["Email or phone on the account","Date they first saw the notice","Any email or SMS they received about it","What they were doing just before"],
+ to:"Whoever owns account and compliance review (to confirm)",
+ re:"Hi {n}, I am sorry about the suspension notice, I know it is worrying. To look into it, please reply with the email or phone number on the account, the date you first saw the notice, and any message you received about it. I will pass it to the right team and update you by [time]."},
+{n:"Verification or documents",hi:0,kw:"verify,verification,verified,bvn,nin,bank statement,upload,mono,document,id card,proof of income,utility bill,timeout",
+ ask:["Which step they are on","Exact error text","Document type and file format","Screenshot and time"],
+ to:"Credit or onboarding operations",
+ re:"Hi {n}, thanks for your message. To help with verification, please tell us which step you are on, the exact error you see, and which document you are uploading (and its format). A screenshot helps a lot. We will reply by [time]."},
+{n:"Repayment or balance",hi:1,kw:"repay,repayment,payment,paid,wallet,balance,default,defaulting,overdue,debit,debited,deducted,transfer,reminder",
+ ask:["Amount and date of payment","Transfer reference or receipt","Screen showing the balance","Reminders received (date and text)"],
+ to:"Collections or finance operations",
+ re:"Hi {n}, thank you for letting us know, and sorry for the worry. Please send the amount, the date, the bank or transfer reference, and a screenshot of your receipt. We will check it against our records and tell you where it stands by [time]."},
+{n:"Delivery or installation",hi:1,kw:"delivery,deliver,delivered,arrive,arrived,install,installer,installation,damaged,cracked,broken,driver,tracking,late,delay",
+ ask:["Order number","Delivery area and date","Photos of the damage, packaging and serial label","What the installer did or did not do"],
+ to:"Logistics or partner operations",
+ re:"Hi {n}, I am sorry about this. Please send your order number, the date and area of delivery, and clear photos of the item, the packaging and the label. If it is damaged, please keep the packaging. We will update you by [time]."},
+{n:"Product information or warranty",hi:0,kw:"spec,specs,specification,warranty,brand,model,quality,genuine,original,datasheet,efficiency,capacity,wattage,compatible",
+ ask:["Product name or link","What exactly they need to know","What they plan to use it for"],
+ to:"Product or merchandising team",
+ re:"Hi {n}, thanks for asking. Could you send the link or name of the product? I will check the brand, specifications and warranty details with our product team and reply by [time]."},
+{n:"Eligibility or terms",hi:0,kw:"eligible,eligibility,age,guarantor,interest,rate,fee,charges,requirement,requirements,collateral,qualify,approval",
+ ask:["Which product they mean","Their specific situation (age, guarantor)","What they could not find"],
+ to:"Customer success (answer) and content owner (fix the FAQ)",
+ re:"Hi {n}, thanks for asking. Our published Terms say you must be at least 18 and provide details for a guarantor, and that an application is not an automatic approval. For anything the Terms do not state, such as interest or fees, I will confirm with the team and reply by [time]."}
+];
+var EX=["Hello, my account has been suspended and I would like some help.","I made my repayment by transfer three days ago but my balance has not updated and I keep getting reminders.","The panel arrived yesterday with a cracked casing and nobody is picking up the phone."];
+[1,2,3].forEach(function(k){$("x"+k).onclick=function(){$("msg").value=EX[k-1];$("go2").click()}});
+$("go2").onclick=function(){
+ var m=$("msg").value,nm=$("nm").value.trim()||"there",sc=[],i,j,n;
+ for(i=0;i<C.length;i++){n=0;for(j=0;j<C[i].kw.split(",").length;j++){if(rx(C[i].kw.split(",")[j]).test(m))n++}sc.push([n,i])}
+ sc.sort(function(a,b){return b[0]-a[0]});
+ if(!m.trim()){return}
+ if(!sc[0][0]){$("o2").innerHTML='<div class="card"><span class="pill no">Needs manual review</span><p>No category matched. Read the message and route it by hand.</p></div>';$("o2").className="";return}
+ var c=C[sc[0][1]],also=sc.slice(1).filter(function(x){return x[0]>0}).map(function(x){return C[x[1]].n}),h='<div class="card"><h2>'+c.n+'</h2>';
+ h+='<span class="pill '+(c.hi?"hi":"no")+'">'+(c.hi?"High priority: money or access affected":"Normal priority")+'</span>';
+ if(also.length)h+='<p class="foot">Also mentions: '+also.join(", ")+'</p>';
+ h+='<p><b>Collect from the customer</b></p><ul class="l">'+c.ask.map(function(x){return"<li>"+x+"</li>"}).join("")+'</ul>';
+ h+='<p><b>Suggested hand-off</b>: '+c.to+' <span class="foot">(adjust to Rivy’s real team structure)</span></p>';
+ h+='<p><b>Draft first reply</b> <span class="foot">(edit before sending; fill in [time])</span></p><textarea id="rp">'+esc(c.re.replace("{n}",nm))+'</textarea>';
+ h+='<div class="row"><button class="b" id="cp">Copy reply</button><span id="cm" class="foot"></span></div></div>';
+ $("o2").innerHTML=h;$("o2").className="";
+ $("cp").onclick=function(){var t=$("rp");try{navigator.clipboard.writeText(t.value).then(function(){$("cm").textContent="Copied."},function(){t.select()})}catch(e){t.select()}};
+ try{var lg=JSON.parse(localStorage.getItem("hd_log")||"[]");lg.unshift({t:new Date().toLocaleString(),c:c.n,p:c.hi?"High":"Normal"});localStorage.setItem("hd_log",JSON.stringify(lg.slice(0,50)))}catch(e){}
+ draw()};
+function draw(){var lg=[];try{lg=JSON.parse(localStorage.getItem("hd_log")||"[]")}catch(e){}
+ if(!lg.length){$("log").innerHTML='<p class="foot">Nothing triaged yet.</p>';return}
+ var n={},t="";lg.forEach(function(x){n[x.c]=(n[x.c]||0)+1});
+ t='<p>'+Object.keys(n).map(function(k){return k+": "+n[k]}).join(" · ")+'</p><div class="scroll"><table><tr><th>When</th><th>Category</th><th>Priority</th></tr>';
+ lg.slice(0,5).forEach(function(x){t+='<tr><td>'+x.t+'</td><td>'+x.c+'</td><td>'+x.p+'</td></tr>'});
+ $("log").innerHTML=t+'</table></div>'}
+$("clr").onclick=function(){try{localStorage.removeItem("hd_log")}catch(e){}draw()};
+draw();
+</script>
+</body>
+</html>
